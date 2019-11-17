@@ -10,10 +10,11 @@ public class ThreadPool {
 	public ThreadPool(int totalThreads) {
 		// TODO Auto-generated constructor stub
 		threads = new Thread[totalThreads];
+		taskQueue = new ConcurrentLinkedQueue<Task>();
 		for(int i = 0; i < threads.length; i++) {
 			threads[i] = new Thread(new Worker(taskQueue));
 		}
-		taskQueue = new ConcurrentLinkedQueue<Task>();
+		
 	}
 
 	public void addTask(Task task) {
@@ -23,8 +24,9 @@ public class ThreadPool {
 	public void start() throws InterruptedException {
 		for(int i = 0; i < threads.length; i++) {
 			threads[i].start();
+		}
+		for(int i = 0; i < threads.length; i++) {
 			threads[i].join();
 		}
 	}
-
 }
